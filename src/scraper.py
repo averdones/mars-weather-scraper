@@ -16,6 +16,9 @@ def get_main_url() -> str:
 def get_selenium_driver(driver_path: str, binary_path: str | None = None) -> webdriver:
     options = Options()
     options.headless = True
+    options.add_argument("--no-sandbox")
+    options.add_argument("--single-process")
+    options.add_argument("--disable-dev-shm-usage")
 
     if binary_path is not None:
         options.binary_location = binary_path

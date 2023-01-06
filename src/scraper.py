@@ -3,7 +3,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
@@ -12,23 +11,27 @@ def get_main_url() -> str:
     return "http://cab.inta-csic.es/rems/en/"
 
 
-def get_selenium_driver() -> webdriver:
+def get_selenium_driver(driver_path: str, binary_path: str | None = None) -> webdriver:
     options = Options()
     options.headless = True
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    if binary_path is not None:
+        options.binary_location = binary_path
+
+    driver = webdriver.Chrome(service=Service(driver_path), options=options)
 
     return driver
 
 
-def download_weather_today() -> str:
-    with get_selenium_driver() as wd:
+def download_weather_today(driver: webdriver) -> str:
+    with driver as wd:
         wd.get(get_main_url())
 
         return WebDriverWait(wd, 20).until(EC.visibility_of_element_located((By.ID, "main-slide"))).text
 
 
-def download_weather_historical() -> list[str]:
-    with get_selenium_driver() as wd:
+def download_weather_historical(driver: webdriver) -> list[str]:
+    with driver as wd:
         wd.get(get_main_url())
 
         historical_data = []

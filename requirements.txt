@@ -1,4 +1,3 @@
 pydantic
 selenium
-webdriver-manager
 boto3

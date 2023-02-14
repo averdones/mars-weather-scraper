@@ -5,18 +5,19 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_main_url() -> str:
-    return "http://cab.inta-csic.es/rems/en/"
+    return "http://cab.inta-csic.es/rems/es/"
 
 
-def get_selenium_driver() -> webdriver:
+def get_selenium_driver(driver_path: str) -> webdriver:
     options = Options()
     options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=Service(driver_path), options=options)
 
     return driver
 
@@ -47,8 +48,3 @@ def download_weather_historical(driver: webdriver) -> list[str]:
             historical_data.append(wd.find_element(By.ID, "main-slide").text)
 
     return historical_data
-
-
-if __name__ == '__main__':
-    driver = get_selenium_driver()
-    print(download_weather_today(driver))

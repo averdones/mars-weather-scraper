@@ -1,3 +1,2 @@
 pydantic
 selenium
-boto3

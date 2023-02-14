@@ -29,5 +29,3 @@ def parse_sol(data: str):
         int(re.findall("Sol (\d+)", data)[0])
     except:
         pass
-
-

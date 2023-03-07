@@ -1,13 +1,13 @@
-name: Download Weather Daily
+#name: Download Weather Daily
 
-on:
-  # Triggers the workflow every 5 minutes
-  schedule:
-    - cron: "*/5 * * * *"
+#on:
+#  # Triggers the workflow every 5 minutes
+#  schedule:
+#    - cron: "*/5 * * * *"
   
-jobs:
-  scrape:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Scrape Daily Weather
-      run: main.py
+#jobs:
+#  scrape:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Scrape Daily Weather
+#      run: main.py

@@ -11,15 +11,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3.3.0
 
-    - name: setup python
+    - name: Setup python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: install python packages
+    - name: Remove Chrome
+      run: sudo apt purge google-chrome-stable
+
+    - name: Remove default Chromium
+      run: sudo apt purge chromium-browser
+
+    - name: Install a new Chromium
+      run: sudo apt install -y chromium-browser
+
+    - name: Install python packages
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: run scraper script
+    - name: Run scraper script
       run: python main.py

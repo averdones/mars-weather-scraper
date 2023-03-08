@@ -1,4 +1,4 @@
-name: Download Weather Daily
+name: Download Weather Manually
 
 on:
   workflow_dispatch:

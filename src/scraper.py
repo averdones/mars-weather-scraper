@@ -11,13 +11,13 @@ def get_main_url() -> str:
     return "http://cab.inta-csic.es/rems/es/"
 
 
-def get_selenium_driver(driver_path: str) -> webdriver:
+def get_selenium_driver() -> webdriver:
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    driver = webdriver.Chrome(service=Service(driver_path), options=options)
+    driver = webdriver.Chrome(service=Service(), options=options)
 
     return driver
 

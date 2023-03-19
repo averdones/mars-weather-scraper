@@ -2,7 +2,7 @@ name: Download Weather Daily
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "45 11 * * *"
 
 jobs:
   scrape:

@@ -22,10 +22,3 @@ def parse_weather_day(data: str) -> dict:
         "dawn": dawn,
         "dusk": dusk
     }
-
-
-def parse_sol(data: str):
-    try:
-        int(re.findall("Sol (\d+)", data)[0])
-    except:
-        pass

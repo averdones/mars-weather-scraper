@@ -45,6 +45,7 @@ def download_weather_historical(driver: webdriver) -> list[str]:
             if daily_data == historical_data[-1]:
                 break
 
-            historical_data.append(wd.find_element(By.ID, "main-slide").text)
+            print(f"Downloaded {daily_data}")
+            historical_data.append(daily_data)
 
     return historical_data

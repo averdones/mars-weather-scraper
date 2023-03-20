@@ -38,14 +38,15 @@ def download_weather_historical(driver: webdriver) -> list[str]:
         historical_data.append(slide.text)
         while True:
             wd.find_element(By.ID, "mw-previous").click()
-            time.sleep(0.25)
+            time.sleep(1)
             daily_data = wd.find_element(By.ID, "main-slide").text
 
             # There is no way of knowing if we reached the end, other than comparing with the previous day
             if daily_data == historical_data[-1]:
                 break
 
-            print(f"Downloaded {daily_data}")
+            daily_data_print = daily_data.replace("\n", " ")
+            print(f"Downloaded {daily_data_print}", end="\n")
             historical_data.append(daily_data)
 
     return historical_data

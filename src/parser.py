@@ -1,8 +1,13 @@
+from src.loggers import setup_logger
 import re
+
+
+logger = setup_logger(__name__, "../logs/parser.log")
 
 
 def parse_weather_day(data: str) -> dict:
     """Parses weather corresponding to a single day."""
+    logger.info(f"Parsing weather data for a single day. Data to be parsed: '{data}'")
     data = data.replace("\n", "")
 
     sol = int(re.findall("Sol (\d+)", data)[0])

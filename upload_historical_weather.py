@@ -21,14 +21,14 @@ def main(load_weather_hist_data_from_file: bool = False):
     driver = get_selenium_driver()
 
     if load_weather_hist_data_from_file:
-        with open("weather_hist_data.pickle", "r") as f:
+        with open("weather_hist_data.pickle", "rb") as f:
             weather_hist_data = pickle.load(f)
     else:
         weather_hist_data = download_weather_historical(driver)
 
     # Pickle in case the upload process fails
     if not load_weather_hist_data_from_file:
-        with open("weather_hist_data.pickle", "w") as f:
+        with open("weather_hist_data.pickle", "wb") as f:
             pickle.dump(weather_hist_data, f)
 
     # Upload to DynamoDB

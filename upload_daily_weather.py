@@ -9,10 +9,11 @@ def main():
     # Scrape
     driver = get_selenium_driver()
     weather_day_data = download_weather_today(driver)
+    parsed_weather_day_data = parse_weather_day(weather_day_data)
 
     # Upload to DynamoDB
     try:
-        DailyWeather(**parse_weather_day(weather_day_data)).save()
+        DailyWeather(**parsed_weather_day_data).save()
     except PutError as e:
         print(e)
 

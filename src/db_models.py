@@ -12,10 +12,10 @@ class DailyWeather(Model):
         aws_secret_access_key = s.AWS_SECRET_ACCESS_KEY
 
     sol = NumberAttribute(hash_key=True)
-    max_air_temp = NumberAttribute()
-    min_air_temp = NumberAttribute()
-    max_ground_temp = NumberAttribute()
-    min_ground_temp = NumberAttribute()
-    pressure = NumberAttribute()
-    dawn = UnicodeAttribute()
-    dusk = UnicodeAttribute()
+    max_air_temp = NumberAttribute(null=True)
+    min_air_temp = NumberAttribute(null=True)
+    max_ground_temp = NumberAttribute(null=True)
+    min_ground_temp = NumberAttribute(null=True)
+    pressure = NumberAttribute(null=True)
+    dawn = UnicodeAttribute(null=True)
+    dusk = UnicodeAttribute(null=True)

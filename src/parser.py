@@ -12,7 +12,7 @@ def parse_weather_day(data: str) -> dict:
     data = data.replace("\n", "")
 
     sol = parse_sol(data)
-    if sol == "":
+    if sol is None:
         logger.error(f"Sol not found in data: '{data}'")
         raise
 
@@ -44,41 +44,41 @@ def parse_weather_day(data: str) -> dict:
     }
 
 
-def parse_sol(data: str) -> int | str:
+def parse_sol(data: str) -> int | None:
     match = re.findall("Sol (\d+)", data)
     if match:
         return int(match[0])
-    else:
-        return ""
+
+    return None
 
 
-def parse_air_temperatures(data: str) -> list[int, int] | list[str, str]:
+def parse_air_temperatures(data: str) -> list[int, int] | list[None, None]:
     match = re.findall("TEMPERATURA DEL AIRE(-?\d+)Max.(-?\d+)Min.", data)
     if match:
         return [int(x) for x in match[0]]
-    else:
-        return ["", ""]
+
+    return [None, None]
 
 
-def parse_ground_temperatures(data: str) -> list[int, int] | list[str, str]:
+def parse_ground_temperatures(data: str) -> list[int, int] | list[None, None]:
     match = re.findall("TEMPERATURA DEL SUELO(-?\d+)Max.(-?\d+)Min.", data)
     if match:
         return [int(x) for x in match[0]]
-    else:
-        return ["", ""]
+
+    return [None, None]
 
 
-def parse_pressure(data: str) -> int | str:
+def parse_pressure(data: str) -> int | None:
     match = re.findall("PRESIÓN(\d+)", data)
     if match:
         return int(match[0])
-    else:
-        return ""
+
+    return None
 
 
-def parse_dawn_dusk(data: str) -> list[str, str]:
+def parse_dawn_dusk(data: str) -> list[str, str] | list[None, None]:
     match = re.findall("AMANECER Y ATARDECER(\d+:\d+)Amanecer(\d+:\d+)Atardecer", data)
     if match:
         return [x for x in match[0]]
-    else:
-        return ["", ""]
+
+    return [None, None]

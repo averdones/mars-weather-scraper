@@ -18,12 +18,11 @@ def main(load_weather_hist_data_from_file: bool = False):
 
     """
     # Scrape
-    driver = get_selenium_driver()
-
     if load_weather_hist_data_from_file:
         with open("weather_hist_data.pickle", "rb") as f:
             weather_hist_data = pickle.load(f)
     else:
+        driver = get_selenium_driver()
         weather_hist_data = download_weather_historical(driver)
 
     # Pickle in case the upload process fails
@@ -47,4 +46,4 @@ def main(load_weather_hist_data_from_file: bool = False):
 
 
 if __name__ == '__main__':
-    main()
+    main(True)

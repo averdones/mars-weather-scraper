@@ -37,6 +37,7 @@ def main(load_weather_hist_data_from_file: bool = False):
             try:
                 DailyWeather(**parsed_day_data).save()
             except PutError:
+                print("Sleeping...")
                 time.sleep(1)
             else:
                 break

@@ -1,5 +1,7 @@
-from src.loggers import setup_logger
 import re
+from datetime import datetime
+
+from src.loggers import setup_logger
 
 
 logger = setup_logger("parser", "../logs/parser.log")
@@ -32,6 +34,9 @@ def parse_weather_day(data: str) -> dict:
     if dawn == "" or dusk == "":
         logger.warning(f"Dawn and dusk not found in Sol: {sol}. Data: '{data}'")
 
+    # Get current date and time as string
+    last_updated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     return {
         "sol": sol,
         "max_air_temp": max_air_temp,
@@ -40,7 +45,8 @@ def parse_weather_day(data: str) -> dict:
         "min_ground_temp": min_ground_temp,
         "pressure": pressure,
         "dawn": dawn,
-        "dusk": dusk
+        "dusk": dusk,
+        "last_updated": last_updated,
     }
 
 

@@ -19,3 +19,4 @@ class DailyWeather(Model):
     pressure = NumberAttribute(null=True)
     dawn = UnicodeAttribute(null=True)
     dusk = UnicodeAttribute(null=True)
+    last_updated = UnicodeAttribute(null=True)

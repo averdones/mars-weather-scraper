@@ -8,7 +8,7 @@ from src.parser import parse_weather_day
 from src.db_models import DailyWeather
 
 
-logger = setup_logger("upload_historical_weather", "../logs/parser.log")
+logger = setup_logger("upload_historical_weather", "../logs/upload_historical_data.log")
 
 
 def main(load_weather_hist_data_from_file: bool = False):

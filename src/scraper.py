@@ -29,6 +29,23 @@ def download_weather_today(driver: webdriver) -> str:
         return WebDriverWait(wd, 20).until(EC.visibility_of_element_located((By.ID, "main-slide"))).text
 
 
+def download_weather_last_n_days(driver: webdriver, n_days: int) -> list[str]:
+    with driver as wd:
+        wd.get(get_main_url())
+
+        last_n_days_data = []
+        slide = WebDriverWait(wd, 20).until(EC.visibility_of_element_located((By.ID, "main-slide")))
+        last_n_days_data.append(slide.text)
+        for i in range(n_days):
+            wd.find_element(By.ID, "mw-previous").click()
+            time.sleep(1)
+            daily_data = wd.find_element(By.ID, "main-slide").text
+            last_n_days_data.append(daily_data)
+
+    return last_n_days_data
+
+
+
 def download_weather_historical(driver: webdriver) -> list[str]:
     with driver as wd:
         wd.get(get_main_url())

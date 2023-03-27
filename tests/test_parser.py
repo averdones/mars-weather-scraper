@@ -1,4 +1,5 @@
 import pytest
+from freezegun import freeze_time
 
 from src.parser import parse_sol, parse_air_temperatures, parse_ground_temperatures, parse_pressure, parse_dawn_dusk, \
     parse_weather_day
@@ -65,6 +66,7 @@ def test_parse_dawn_dusk(data, expected):
     assert parse_dawn_dusk(data) == expected
 
 
+@freeze_time("2020-03-15")
 def test_parse_weather_day():
     assert parse_weather_day(
         "Tierra, 2023-03-15 UTC\nMarte, Mes 2 - LS 37°\n««\n«\nSol 3770\n»»\n»\nTEMPERATURA DEL AIRE\n-17\nMax.\n-78"
@@ -81,4 +83,5 @@ def test_parse_weather_day():
             "pressure": 840,
             "dawn": "06:19",
             "dusk": "18:09",
+            "last_updated": "2020-03-15 00:00:00",
     }

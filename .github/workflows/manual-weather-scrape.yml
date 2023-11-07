@@ -18,18 +18,45 @@ jobs:
     - name: Remove Chrome
       run: sudo apt purge google-chrome-stable
 
-    - name: Remove default Chromium
+    - name: Remove Chromium
       run: sudo apt purge chromium-browser
 
-    - name: Remove Existing ChromeDriver
-      # Purging Chromium does not remove the ChromeDriver
+    - name: Remove existing ChromeDriver
       run: sudo rm -f /usr/bin/chromedriver
 
-    - name: Install a new Chromium
-      run: sudo apt install -y chromium-browser
+    ###############################################
+    # Install Chrome and ChromeDriver
+    - name: Install jq
+      run: sudo apt-get -y install jq
 
-    - name: Check Chromium Version
-      run: chromium-browser --version
+    - name: Get latest Chrome and ChromeDriver URLs
+      run: |
+        JSON_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
+        CHROME_VERSION=$(curl -s $JSON_URL | jq -r '.channels.Stable.version')
+        CHROMEDRIVER_URL=$(curl -s $JSON_URL | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64").url')
+        CHROME_URL=$(curl -s $JSON_URL | jq -r '.channels.Stable.downloads.chrome[] | select(.platform == "linux64").url')
+        echo "Chrome Version: $CHROME_VERSION"
+        echo "ChromeDriver URL: $CHROMEDRIVER_URL"
+        echo "Chrome URL: $CHROME_URL"
+
+    - name: Install Chrome
+      run: |
+        wget "$CHROME_URL" -O chrome-linux64.zip
+        unzip chrome-linux64.zip
+        sudo mv chrome-linux64 /usr/bin/chrome
+        sudo chmod +x /usr/bin/chrome
+
+    - name: Install ChromeDriver
+      run: |
+        wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
+        unzip chromedriver-linux64.zip
+        sudo mv chromedriver-linux64 /usr/bin/chromedriver
+        sudo chmod +x /usr/bin/chromedriver
+
+    ###############################################
+
+    - name: Check Chrome Version
+      run: chrome-browser --version
 
     - name: Check ChromeDriver Version
       run: chromedriver --version

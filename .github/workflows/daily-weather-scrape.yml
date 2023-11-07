@@ -25,10 +25,16 @@ jobs:
     - name: Install a new Chromium
       run: sudo apt install -y chromium-browser
 
+    - name: Check Chromium Version
+      run: chromium-browser --version
+
     - name: Install python packages
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Check Selenium Version
+      run: pip show selenium
 
     - name: Run scraper script and upload to DynamoDB
       env:

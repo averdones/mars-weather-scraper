@@ -21,6 +21,10 @@ jobs:
     - name: Remove default Chromium
       run: sudo apt purge chromium-browser
 
+    - name: Remove Existing ChromeDriver
+      # Purging Chromium does not remove the ChromeDriver
+      run: sudo rm -f /usr/local/bin/chromedriver
+
     - name: Install a new Chromium
       run: sudo apt install -y chromium-browser
 

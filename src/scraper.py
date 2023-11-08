@@ -19,6 +19,9 @@ def get_selenium_driver() -> webdriver:
 
     driver = webdriver.Chrome(service=Service(), options=options)
 
+    print(f"Chrome Version: {driver.capabilities['browserVersion']}")
+    print(f"ChromeDriver Version: {driver.capabilities['chrome']['chromedriverVersion']}")
+
     return driver
 
 

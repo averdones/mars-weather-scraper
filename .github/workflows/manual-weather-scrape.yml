@@ -26,7 +26,7 @@ jobs:
       run: chromedriver --version
 
     - name: DEBUG - Check Chrome Installation Path
-      run: which chrome
+      run: which google-chrome
 
     - name: DEBUG - Check ChromeDriver Installation Path
       run: which chromedriver

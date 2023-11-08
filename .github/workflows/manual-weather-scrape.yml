@@ -106,8 +106,8 @@ jobs:
 #    - name: Check ChromeDriver Version
 #      run: chromedriver --version
 
-    - name: Check ChromeDriver Installation Path
-      run: which chromedriver
+#    - name: Check ChromeDriver Installation Path
+#      run: which chromedriver
 
     - name: Install python packages
       run: |
@@ -117,8 +117,8 @@ jobs:
     - name: Check Selenium Version
       run: pip show selenium
 
-#    - name: Run scraper script and upload to DynamoDB
-#      env:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#      run: python upload_daily_weather.py
+    - name: Run scraper script and upload to DynamoDB
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: python upload_daily_weather.py

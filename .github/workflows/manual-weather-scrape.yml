@@ -15,6 +15,18 @@ jobs:
       with:
         python-version: '3.10'
 
+
+    - name: DEBUG - Print PATH
+      run: echo $PATH
+
+    - name: DEBUG - Check Chrome Version
+      run: chrome --version
+
+    - name: DEBUG - Check ChromeDriver Version
+      run: chromedriver --version
+
+
+
     - name: Remove Chrome
       run: sudo apt purge --auto-remove google-chrome-stable
 

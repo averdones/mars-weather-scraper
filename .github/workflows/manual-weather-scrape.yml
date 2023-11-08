@@ -103,11 +103,11 @@ jobs:
 #    - name: Check Chrome Version
 #      run: google-chrome --version
 
-#    - name: Check ChromeDriver Version
-#      run: chromedriver --version
+    - name: Check ChromeDriver Version
+      run: /usr/bin/chromedriver --version
 
-#    - name: Check ChromeDriver Installation Path
-#      run: which chromedriver
+    - name: Check ChromeDriver Installation Path
+      run: which /usr/bin/chromedriver
 
     - name: Install python packages
       run: |

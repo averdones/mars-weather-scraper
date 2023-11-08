@@ -41,7 +41,6 @@ jobs:
 
     - name: Remove Chrome
       run: |
-        sudo apt purge --auto-remove google-chrome-stable
         sudo apt purge --auto-remove google-chrome
         sudo rm -rf /usr/local/share/chromium/chrome-linux
 

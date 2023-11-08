@@ -60,7 +60,7 @@ jobs:
     ###############################################
 
     - name: Check Chrome Version
-      run: google-chrome-stable --version
+      run: chromium-browser --version
 
     - name: Check ChromeDriver Version
       run: chromedriver --version

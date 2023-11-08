@@ -16,10 +16,10 @@ jobs:
         python-version: '3.10'
 
     - name: Remove Chrome
-      run: sudo apt purge google-chrome-stable
+      run: sudo apt purge --auto-remove google-chrome-stable
 
     - name: Remove Chromium
-      run: sudo apt purge chromium-browser
+      run: sudo apt purge --auto-remove chromium-browser
 
     - name: Remove existing ChromeDriver
       run: sudo rm -f /usr/bin/chromedriver
@@ -59,8 +59,11 @@ jobs:
 
     ###############################################
 
+    - name: DEBUG - Print PATH
+      run: echo $PATH
+
     - name: Check Chrome Version
-      run: chromium-browser --version
+      run: chrome --version
 
     - name: Check ChromeDriver Version
       run: chromedriver --version

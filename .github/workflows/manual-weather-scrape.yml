@@ -41,13 +41,15 @@ jobs:
 
     - name: Install Chrome
       run: |
-        wget "$CHROME_URL" -O chrome-linux64.zip
+        echo "Chrome URL: $CHROME_URL"
+        wget -O chrome-linux64.zip "$CHROME_URL"
         unzip chrome-linux64.zip
         sudo mv chrome-linux64 /usr/bin/chrome
         sudo chmod +x /usr/bin/chrome
 
     - name: Install ChromeDriver
       run: |
+        echo "Chrome URL: $CHROME_URL"
         wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
         unzip chromedriver-linux64.zip
         sudo mv chromedriver-linux64 /usr/bin/chromedriver

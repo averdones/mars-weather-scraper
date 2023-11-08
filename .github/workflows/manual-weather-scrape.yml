@@ -15,7 +15,6 @@ jobs:
       with:
         python-version: '3.10'
 
-
     - name: DEBUG - Print PATH
       run: echo $PATH
 
@@ -77,6 +76,15 @@ jobs:
 
     - name: DEBUG - Print PATH
       run: echo $PATH
+
+    - name: DEBUG - List Files and Folders in /usr/bin
+      run: ls -l /usr/bin
+
+    - name: DEBUG - List Files and Folders in /usr/bin/chromedriver
+      run: ls -l /usr/bin/chromedriver
+
+    - name: DEBUG - List Files and Folders in /usr/bin/chrome
+      run: ls -l /usr/bin/chrome
 
     - name: Check Chrome Version
       run: google-chrome --version

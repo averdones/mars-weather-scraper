@@ -30,7 +30,6 @@ jobs:
       run: sudo apt-get -y install jq
 
     - name: Install latest compatible versions of Chrome and ChromeDriver
-      # Get the latest Chrome and ChromeDriver URLs
       run: |
         JSON_URL="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
         CHROME_VERSION=$(curl -s $JSON_URL | jq -r '.channels.Stable.version')
@@ -39,14 +38,10 @@ jobs:
         echo "Chrome Version: $CHROME_VERSION"
         echo "ChromeDriver URL: $CHROMEDRIVER_URL"
         echo "Chrome URL: $CHROME_URL"
-
-      # Install Chrome
         wget -O chrome-linux64.zip "$CHROME_URL"
         unzip chrome-linux64.zip
         sudo mv chrome-linux64 /usr/bin/chrome
         sudo chmod +x /usr/bin/chrome
-      
-      # Install ChromeDriver
         wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
         unzip chromedriver-linux64.zip
         sudo mv chromedriver-linux64 /usr/bin/chromedriver

@@ -16,8 +16,12 @@ def get_selenium_driver() -> webdriver:
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.binary_location = "/usr/bin/chrome/chrome"
 
-    driver = webdriver.Chrome(service=Service(), options=options)
+    chromedriver_path = "/usr/bin/chromedriver/chromedriver"
+    service = webdriver.chrome.service.Service(executable_path=chromedriver_path)
+
+    driver = webdriver.Chrome(service=service, options=options)
 
     print(f"Chrome Version: {driver.capabilities['browserVersion']}")
     print(f"ChromeDriver Version: {driver.capabilities['chrome']['chromedriverVersion']}")

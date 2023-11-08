@@ -25,7 +25,11 @@ jobs:
     - name: DEBUG - Check ChromeDriver Version
       run: chromedriver --version
 
+    - name: DEBUG - Check Chrome Installation Path
+      run: which chrome
 
+    - name: DEBUG - Check ChromeDriver Installation Path
+      run: which chromedriver
 
     - name: Remove Chrome
       run: sudo apt purge --auto-remove google-chrome-stable

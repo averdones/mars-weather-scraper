@@ -40,9 +40,10 @@ jobs:
       run: which chromedriver
 
     - name: Remove Chrome
-      run: |
-        sudo apt purge --auto-remove google-chrome
-        sudo rm -rf /usr/local/share/chromium/chrome-linux
+      run: sudo apt purge --auto-remove google-chrome-stable
+
+    - name: Remove other Chrome
+      run: sudo rm -rf /usr/local/share/chromium/chrome-linux
 
     - name: Remove ChromeDriver
       run: sudo rm -rf /usr/local/share/chromedriver-linux64/chromedriver

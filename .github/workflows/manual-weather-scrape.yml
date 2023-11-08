@@ -40,13 +40,13 @@ jobs:
       run: which chromedriver
 
     - name: Remove Chrome
-      run: sudo apt purge --auto-remove google-chrome-stable
+      run: |
+        sudo apt purge --auto-remove google-chrome-stable
+        sudo apt purge --auto-remove google-chrome
+        sudo rm -rf /usr/local/share/chromium/chrome-linux
 
-    - name: Remove Chromium
-      run: sudo apt purge --auto-remove chromium-browser
-
-    - name: Remove existing ChromeDriver
-      run: sudo rm -f /usr/bin/chromedriver
+    - name: Remove ChromeDriver
+      run: sudo rm -rf /usr/local/share/chromedriver-linux64/chromedriver
 
     - name: DEBUG - 1.5 List Files and Folders in /usr/bin
       run: ls -l /usr/bin
@@ -98,11 +98,11 @@ jobs:
     - name: DEBUG - 2. List Files and Folders in /usr/bin/chrome
       run: ls -l /usr/bin/chrome
 
-    - name: Check Chrome Version
-      run: google-chrome --version
+#    - name: Check Chrome Version
+#      run: google-chrome --version
 
-    - name: Check ChromeDriver Version
-      run: chromedriver --version
+#    - name: Check ChromeDriver Version
+#      run: chromedriver --version
 
     - name: Check ChromeDriver Installation Path
       run: which chromedriver

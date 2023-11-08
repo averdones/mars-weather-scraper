@@ -14,44 +14,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-
-    - name: DEBUG - Print PATH
-      run: echo $PATH
-
-    - name: DEBUG - 1. List Files and Folders in /usr/bin
-      run: ls -l /usr/bin
-
-    - name: DEBUG - List Files and Folders in /usr/local/share
-      run: ls -l /usr/local/share
-
-    - name: DEBUG - 1. List Files and Folders in /usr/bin/chromedriver
-      run: ls -l /usr/bin/chromedriver
-
-    - name: DEBUG - Check Chrome Version
-      run: google-chrome --version
-
-    - name: DEBUG - Check ChromeDriver Version
-      run: chromedriver --version
-
-    - name: DEBUG - Check Chrome Installation Path
-      run: which google-chrome
-
-    - name: DEBUG - Check ChromeDriver Installation Path
-      run: which chromedriver
-
-#    - name: Remove Stable Chrome
-#      run: sudo apt purge --auto-remove google-chrome-stable
-#
-#    - name: Remove Chromium
-#      run: sudo rm -rf /usr/local/share/chromium/chrome-linux
 #
     - name: Remove ChromeDriver
-      run: |
-        sudo rm -rf /usr/local/share/chromedriver-linux64/chromedriver
-        sudo rm -rf /usr/bin/chromedriver
-
-    - name: DEBUG - 1.5 List Files and Folders in /usr/bin
-      run: ls -l /usr/bin
+      run: sudo rm -rf /usr/bin/chromedriver
 
     ###############################################
     # Install Chrome and ChromeDriver
@@ -87,18 +52,6 @@ jobs:
         sudo chmod +x /usr/bin/chromedriver
 
     ###############################################
-
-    - name: DEBUG - Print PATH
-      run: echo $PATH
-
-    - name: DEBUG - 2. List Files and Folders in /usr/bin
-      run: ls -l /usr/bin
-
-    - name: DEBUG - 2. List Files and Folders in /usr/bin/chromedriver
-      run: ls -l /usr/bin/chromedriver
-
-    - name: DEBUG - 2. List Files and Folders in /usr/bin/chrome
-      run: ls -l /usr/bin/chrome
 
     - name: Check Chrome Version
       run: /usr/bin/chrome/chrome --version

@@ -75,7 +75,7 @@ jobs:
       run: echo $PATH
 
     - name: Check Chrome Version
-      run: chrome --version
+      run: google-chrome --version
 
     - name: Check ChromeDriver Version
       run: chromedriver --version

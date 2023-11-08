@@ -18,6 +18,15 @@ jobs:
     - name: DEBUG - Print PATH
       run: echo $PATH
 
+    - name: DEBUG - 1. List Files and Folders in /usr/bin
+      run: ls -l /usr/bin
+
+    - name: DEBUG - 1. List Files and Folders in /usr/bin/chromedriver
+      run: ls -l /usr/bin/chromedriver
+
+    - name: DEBUG - 1. List Files and Folders in /usr/bin/chrome
+      run: ls -l /usr/bin/chrome
+
     - name: DEBUG - Check Chrome Version
       run: google-chrome --version
 
@@ -77,13 +86,13 @@ jobs:
     - name: DEBUG - Print PATH
       run: echo $PATH
 
-    - name: DEBUG - List Files and Folders in /usr/bin
+    - name: DEBUG - 2. List Files and Folders in /usr/bin
       run: ls -l /usr/bin
 
-    - name: DEBUG - List Files and Folders in /usr/bin/chromedriver
+    - name: DEBUG - 2. List Files and Folders in /usr/bin/chromedriver
       run: ls -l /usr/bin/chromedriver
 
-    - name: DEBUG - List Files and Folders in /usr/bin/chrome
+    - name: DEBUG - 2. List Files and Folders in /usr/bin/chrome
       run: ls -l /usr/bin/chrome
 
     - name: Check Chrome Version

@@ -21,6 +21,9 @@ jobs:
     - name: DEBUG - 1. List Files and Folders in /usr/bin
       run: ls -l /usr/bin
 
+    - name: DEBUG - List Files and Folders in /usr/local/share
+      run: ls -l /usr/local/share
+
     - name: DEBUG - 1. List Files and Folders in /usr/bin/chromedriver
       run: ls -l /usr/bin/chromedriver
 

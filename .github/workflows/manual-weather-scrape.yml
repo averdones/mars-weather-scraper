@@ -100,14 +100,14 @@ jobs:
     - name: DEBUG - 2. List Files and Folders in /usr/bin/chrome
       run: ls -l /usr/bin/chrome
 
-#    - name: Check Chrome Version
-#      run: google-chrome --version
+    - name: Check Chrome Version
+      run: /usr/bin/chrome/chrome --version
 
     - name: Check ChromeDriver Version
-      run: /usr/bin/chromedriver --version
+      run: /usr/bin/chromedriver/chromedriver --version
 
     - name: Check ChromeDriver Installation Path
-      run: which /usr/bin/chromedriver
+      run: which /usr/bin/chromedriver/chromedriver
 
     - name: Install python packages
       run: |

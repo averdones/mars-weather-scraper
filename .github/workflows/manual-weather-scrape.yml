@@ -38,8 +38,8 @@ jobs:
         echo "Chrome Version: $CHROME_VERSION"
         echo "Chrome URL: $CHROME_URL"
         echo "ChromeDriver URL: $CHROMEDRIVER_URL"
-        echo "$CHROME_URL=$CHROME_URL" >> $GITHUB_ENV
-        echo "$CHROMEDRIVER_URL=$CHROMEDRIVER_URL" >> $GITHUB_ENV
+        echo "CHROME_URL=$CHROME_URL" >> $GITHUB_ENV
+        echo "CHROMEDRIVER_URL=$CHROMEDRIVER_URL" >> $GITHUB_ENV
 
     - name: Install Chrome
       run: |

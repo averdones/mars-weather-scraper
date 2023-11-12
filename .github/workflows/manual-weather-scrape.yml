@@ -22,7 +22,10 @@ jobs:
       run: sudo rm -rf /usr/local/share/chromedriver-linux64
 
     - name: Remove Chrome
-      run: sudo rm -rf /usr/local/share/chromium
+      run: |
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /etc/alternatives/google-chrome
+        sudo rm -rf /opt/google/chrome/google-chrome
 
     ###############################################
     # Install Chrome and ChromeDriver

@@ -56,11 +56,17 @@ jobs:
 
     ###############################################
 
-    - name: Check Chrome Version
-      run: /usr/local/share/chromium/chrome-linux/chrome --version
+    - name: Show files Chromedriver
+      run: ls -l /usr/local/share/chromedriver-linux64
 
-    - name: Check ChromeDriver Version
-      run: /usr/local/share/chromedriver-linux64/chromedriver --version
+    - name: Show files Chrome
+      run: ls -l /usr/local/share/chromium/chrome-linux
+
+#    - name: Check Chrome Version
+#      run: /usr/local/share/chromium/chrome-linux/chrome --version
+#
+#    - name: Check ChromeDriver Version
+#      run: /usr/local/share/chromedriver-linux64/chromedriver --version
 
     - name: Check ChromeDriver Installation Path
       run: which /usr/local/share/chromedriver-linux64/chromedriver

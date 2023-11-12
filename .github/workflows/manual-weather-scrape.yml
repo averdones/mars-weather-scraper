@@ -60,7 +60,7 @@ jobs:
       run: ls -l /usr/local/share/chromedriver-linux64
 
     - name: Show files Chrome
-      run: ls -l /usr/local/share/chromium/chrome-linux
+      run: ls -l /usr/local/share/chromium/chrome-linux64
 
 #    - name: Check Chrome Version
 #      run: /usr/local/share/chromium/chrome-linux/chrome --version

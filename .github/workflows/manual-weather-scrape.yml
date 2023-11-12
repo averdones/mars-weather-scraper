@@ -14,7 +14,10 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-#
+
+    - name: which chrome
+      run: which google-chrome
+
     - name: Remove ChromeDriver
       run: sudo rm -rf /usr/local/share/chromedriver-linux64
 

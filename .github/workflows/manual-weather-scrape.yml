@@ -43,21 +43,21 @@ jobs:
         echo "Chrome URL: $CHROME_URL"
         wget -O chrome-linux64.zip "$CHROME_URL"
         unzip chrome-linux64.zip
-        sudo mv chrome-linux64 /usr/local/share/chromium/chrome-linux
-        sudo chmod +x /usr/local/share/chromium/chrome-linux
+        sudo mv chrome-linux64 /usr/local/share/chromium
+        sudo chmod +x /usr/local/share/chromium/chrome-linux64
 
     - name: Install ChromeDriver
       run: |
         echo "ChromeDriver URL: $CHROMEDRIVER_URL"
         wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
         unzip chromedriver-linux64.zip
-        sudo mv chromedriver-linux64 /usr/local/share/chromedriver-linux64
+        sudo mv chromedriver-linux64 /usr/local/share
         sudo chmod +x /usr/local/share/chromedriver-linux64
 
     ###############################################
 
     - name: Show files Chromedriver
-      run: ls -l /usr/local/share/chromedriver-linux64/chromedriver-linux64
+      run: ls -l /usr/local/share/chromedriver-linux64
 
     - name: Show files Chrome
       run: ls -l /usr/local/share/chromium/chrome-linux

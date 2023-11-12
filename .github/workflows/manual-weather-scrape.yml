@@ -15,13 +15,10 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: which chrome
-      run: which google-chrome
-
     - name: Remove ChromeDriver
       run: sudo rm -rf /usr/local/share/chromedriver-linux64
 
-    - name: Remove Chrome
+    - name: Remove all Chrome installations
       run: |
         sudo rm -rf /usr/local/share/chromium
         sudo rm -rf /etc/alternatives/google-chrome
@@ -60,23 +57,7 @@ jobs:
         unzip chromedriver-linux64.zip
         sudo mv chromedriver-linux64 /usr/local/share
         sudo chmod +x /usr/local/share/chromedriver-linux64
-
     ###############################################
-
-    - name: Show files Chrome
-      run: ls -l /usr/local/share/chromium/chrome-linux
-
-    - name: Show files Chromedriver
-      run: ls -l /usr/local/share/chromedriver-linux64
-
-#    - name: Check Chrome Version
-#      run: /usr/local/share/chromium/chrome-linux/chrome --version
-#
-#    - name: Check ChromeDriver Version
-#      run: /usr/local/share/chromedriver-linux64/chromedriver --version
-
-    - name: Check ChromeDriver Installation Path
-      run: which /usr/local/share/chromedriver-linux64/chromedriver
 
     - name: Install python packages
       run: |

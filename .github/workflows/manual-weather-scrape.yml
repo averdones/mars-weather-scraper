@@ -16,7 +16,10 @@ jobs:
         python-version: '3.10'
 #
     - name: Remove ChromeDriver
-      run: sudo rm -rf /usr/bin/chromedriver
+      run: sudo rm -rf /usr/local/share/chromedriver-linux64/chromedriver
+
+    - name: Remove Chrome
+      run: sudo rm -rf /usr/local/share/chromium/chrome-linux/chrome
 
     ###############################################
     # Install Chrome and ChromeDriver
@@ -40,27 +43,27 @@ jobs:
         echo "Chrome URL: $CHROME_URL"
         wget -O chrome-linux64.zip "$CHROME_URL"
         unzip chrome-linux64.zip
-        sudo mv chrome-linux64 /usr/bin/chrome
-        sudo chmod +x /usr/bin/chrome
+        sudo mv chrome-linux64 /usr/local/share/chromium/chrome-linux
+        sudo chmod +x /usr/local/share/chromium/chrome-linux
 
     - name: Install ChromeDriver
       run: |
         echo "ChromeDriver URL: $CHROMEDRIVER_URL"
         wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
         unzip chromedriver-linux64.zip
-        sudo mv chromedriver-linux64 /usr/bin/chromedriver
-        sudo chmod +x /usr/bin/chromedriver
+        sudo mv chromedriver-linux64 /usr/local/share/chromedriver-linux64
+        sudo chmod +x /usr/local/share/chromedriver-linux64
 
     ###############################################
 
     - name: Check Chrome Version
-      run: /usr/bin/chrome/chrome --version
+      run: /usr/local/share/chromium/chrome-linux/chrome --version
 
     - name: Check ChromeDriver Version
-      run: /usr/bin/chromedriver/chromedriver --version
+      run: /usr/local/share/chromedriver-linux64/chromedriver --version
 
     - name: Check ChromeDriver Installation Path
-      run: which /usr/bin/chromedriver/chromedriver
+      run: which /usr/local/share/chromedriver-linux64/chromedriver
 
     - name: Install python packages
       run: |

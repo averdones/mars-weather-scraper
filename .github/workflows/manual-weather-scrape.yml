@@ -57,7 +57,7 @@ jobs:
     ###############################################
 
     - name: Show files Chromedriver
-      run: ls -l /usr/local/share/chromedriver-linux64
+      run: ls -l /usr/local/share/chromedriver-linux64/chromedriver-linux64
 
     - name: Show files Chrome
       run: ls -l /usr/local/share/chromium/chrome-linux

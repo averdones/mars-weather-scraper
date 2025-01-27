@@ -1,10 +1,12 @@
 import time
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 
 def get_main_url() -> str:
@@ -25,6 +27,11 @@ def get_selenium_driver() -> webdriver:
     return driver
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    retry=retry_if_exception_type((TimeoutException, WebDriverException))
+)
 def download_weather_today(driver: webdriver) -> str:
     with driver as wd:
         wd.get(get_main_url())
@@ -32,6 +39,11 @@ def download_weather_today(driver: webdriver) -> str:
         return WebDriverWait(wd, 20).until(EC.visibility_of_element_located((By.ID, "main-slide"))).text
 
 
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    retry=retry_if_exception_type((TimeoutException, WebDriverException))
+)
 def download_weather_last_n_days(driver: webdriver, n_days: int) -> list[str]:
     with driver as wd:
         wd.get(get_main_url())

@@ -13,4 +13,4 @@ WORKDIR /app
 # Install your dependencies (selenium >= 4.10)
 RUN pip install --upgrade pip && pip install selenium>=4.10 -r requirements.txt
 
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["python", "upload_daily_weather.py"]

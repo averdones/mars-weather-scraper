@@ -1,3 +1,6 @@
+import json
+from urllib.error import URLError
+
 from selenium.common.exceptions import TimeoutException
 
 from src import scraper
@@ -98,6 +101,34 @@ def test_download_weather_last_n_days_uses_api(monkeypatch):
     weather_days = scraper.download_weather_last_n_days(n_days=1)
 
     assert [parse_weather_day(weather_day)["sol"] for weather_day in weather_days] == [4941, 4940]
+
+
+def test_download_weather_api_falls_back_after_connection_timeout(monkeypatch):
+    calls = []
+
+    class FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            return False
+
+        def read(self):
+            return json.dumps({"soles": API_SOLES}).encode()
+
+    def fake_urlopen(request, timeout):
+        calls.append(request.full_url)
+        if len(calls) == 1:
+            raise URLError(TimeoutError("timed out"))
+        return FakeResponse()
+
+    monkeypatch.setattr(scraper, "WEATHER_API_URLS", ("https://primary.example/api", "https://fallback.example/api"))
+    monkeypatch.setattr(scraper, "urlopen", fake_urlopen)
+
+    soles = scraper._download_weather_api()
+
+    assert [sol["sol"] for sol in soles] == ["4941", "4940"]
+    assert calls == ["https://primary.example/api", "https://fallback.example/api"]
 
 
 def test_download_weather_today_stops_loading_after_page_load_timeout(monkeypatch):

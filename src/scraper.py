@@ -18,7 +18,10 @@ from urllib3.exceptions import ReadTimeoutError
 PAGE_LOAD_TIMEOUT_SECONDS = 45
 WEATHER_WIDGET_TIMEOUT_SECONDS = 20
 WEATHER_API_TIMEOUT_SECONDS = 30
-WEATHER_API_URL = "http://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php"
+WEATHER_API_URLS = (
+    "https://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php",
+    "http://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php",
+)
 PAGE_LOAD_RECOVERY_EXCEPTIONS = (TimeoutException, ReadTimeoutError)
 
 
@@ -26,7 +29,7 @@ class WeatherApiError(RuntimeError):
     pass
 
 
-SCRAPE_RETRY_EXCEPTIONS = (TimeoutException, WebDriverException, ReadTimeoutError, URLError, TimeoutError, WeatherApiError)
+SCRAPE_RETRY_EXCEPTIONS = (TimeoutException, WebDriverException, ReadTimeoutError, URLError, OSError, WeatherApiError)
 
 
 def get_main_url() -> str:
@@ -69,19 +72,41 @@ def _get_weather_slide_text(driver: WebDriver) -> str:
     ).text
 
 
-def _download_weather_api() -> list[dict]:
+def _request_weather_api(url: str) -> dict:
     request = Request(
-        WEATHER_API_URL,
+        url,
         data=b"",
-        headers={"User-Agent": "mars-weather-scraper/1.0"},
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+            ),
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Origin": "https://cab.inta-csic.es",
+            "Referer": "https://cab.inta-csic.es/rems/es/",
+            "X-Requested-With": "XMLHttpRequest",
+        },
     )
     with urlopen(request, timeout=WEATHER_API_TIMEOUT_SECONDS) as response:
         raw_data = response.read().decode("utf-8", errors="replace")
 
     try:
-        data = json.loads(raw_data)
+        return json.loads(raw_data)
     except json.JSONDecodeError as exc:
         raise WeatherApiError("REMS weather API returned invalid JSON") from exc
+
+
+def _download_weather_api() -> list[dict]:
+    errors = []
+    for url in WEATHER_API_URLS:
+        try:
+            data = _request_weather_api(url)
+            break
+        except (URLError, OSError, WeatherApiError) as exc:
+            errors.append(f"{url}: {exc}")
+    else:
+        raise WeatherApiError("Could not connect to the REMS weather API. " + " | ".join(errors))
 
     soles = data.get("soles")
     if not isinstance(soles, list) or not soles:

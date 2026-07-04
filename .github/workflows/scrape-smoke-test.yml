@@ -1,0 +1,18 @@
+name: Scrape Smoke Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scrape-smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t scraper-image .
+
+    - name: Run scrape smoke test container
+      run: docker run --rm --network host --entrypoint python scraper-image scrape_smoke_test.py

@@ -131,6 +131,10 @@ def test_download_weather_api_falls_back_after_connection_timeout(monkeypatch):
     assert calls == ["https://primary.example/api", "https://fallback.example/api"]
 
 
+def test_weather_api_uses_nasa_msl_feed_first():
+    assert scraper.WEATHER_API_URLS[0] == "https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json"
+
+
 def test_download_weather_today_stops_loading_after_page_load_timeout(monkeypatch):
     monkeypatch.setattr(scraper, "WebDriverWait", FakeWait)
     driver = DriverWithHungPageLoad()

@@ -19,6 +19,7 @@ PAGE_LOAD_TIMEOUT_SECONDS = 45
 WEATHER_WIDGET_TIMEOUT_SECONDS = 20
 WEATHER_API_TIMEOUT_SECONDS = 30
 WEATHER_API_URLS = (
+    "https://mars.nasa.gov/rss/api/?feed=weather&category=msl&feedtype=json",
     "https://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php",
     "http://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php",
 )
@@ -75,17 +76,13 @@ def _get_weather_slide_text(driver: WebDriver) -> str:
 def _request_weather_api(url: str) -> dict:
     request = Request(
         url,
-        data=b"",
         headers={
             "User-Agent": (
                 "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
             ),
             "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "Origin": "https://cab.inta-csic.es",
-            "Referer": "https://cab.inta-csic.es/rems/es/",
-            "X-Requested-With": "XMLHttpRequest",
+            "Referer": "https://mars.nasa.gov/msl/weather/",
         },
     )
     with urlopen(request, timeout=WEATHER_API_TIMEOUT_SECONDS) as response:

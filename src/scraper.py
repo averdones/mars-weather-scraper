@@ -1,4 +1,8 @@
+import json
 import time
+from urllib.error import URLError
+from urllib.request import Request, urlopen
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.common.by import By
@@ -13,8 +17,16 @@ from urllib3.exceptions import ReadTimeoutError
 
 PAGE_LOAD_TIMEOUT_SECONDS = 45
 WEATHER_WIDGET_TIMEOUT_SECONDS = 20
+WEATHER_API_TIMEOUT_SECONDS = 30
+WEATHER_API_URL = "http://cab.inta-csic.es/rems/wp-content/plugins/marsweather-widget/api.php"
 PAGE_LOAD_RECOVERY_EXCEPTIONS = (TimeoutException, ReadTimeoutError)
-SCRAPE_RETRY_EXCEPTIONS = (TimeoutException, WebDriverException, ReadTimeoutError)
+
+
+class WeatherApiError(RuntimeError):
+    pass
+
+
+SCRAPE_RETRY_EXCEPTIONS = (TimeoutException, WebDriverException, ReadTimeoutError, URLError, TimeoutError, WeatherApiError)
 
 
 def get_main_url() -> str:
@@ -57,6 +69,88 @@ def _get_weather_slide_text(driver: WebDriver) -> str:
     ).text
 
 
+def _download_weather_api() -> list[dict]:
+    request = Request(
+        WEATHER_API_URL,
+        data=b"",
+        headers={"User-Agent": "mars-weather-scraper/1.0"},
+    )
+    with urlopen(request, timeout=WEATHER_API_TIMEOUT_SECONDS) as response:
+        raw_data = response.read().decode("utf-8", errors="replace")
+
+    try:
+        data = json.loads(raw_data)
+    except json.JSONDecodeError as exc:
+        raise WeatherApiError("REMS weather API returned invalid JSON") from exc
+
+    soles = data.get("soles")
+    if not isinstance(soles, list) or not soles:
+        raise WeatherApiError("REMS weather API did not return any sols")
+
+    try:
+        return sorted(soles, key=lambda sol: int(sol["sol"]), reverse=True)
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeatherApiError("REMS weather API returned malformed sol data") from exc
+
+
+def _format_api_value(weather_day: dict, key: str) -> str:
+    value = weather_day.get(key)
+    return "--" if value in (None, "") else str(value)
+
+
+def _format_api_season(weather_day: dict) -> str:
+    season = _format_api_value(weather_day, "season")
+    if season.startswith("Month "):
+        return season.replace("Month ", "Mes ", 1)
+    return season
+
+
+def _format_api_weather_day(weather_day: dict) -> str:
+    return (
+        f"Tierra, {_format_api_value(weather_day, 'terrestrial_date')} UTC\n"
+        f"Marte, {_format_api_season(weather_day)} - LS {_format_api_value(weather_day, 'ls')}°\n"
+        "««\n"
+        "«\n"
+        f"Sol {_format_api_value(weather_day, 'sol')}\n"
+        "»»\n"
+        "»\n"
+        "TEMPERATURA DEL AIRE\n"
+        f"{_format_api_value(weather_day, 'max_temp')}\n"
+        "Max.\n"
+        f"{_format_api_value(weather_day, 'min_temp')}\n"
+        "Min.\n"
+        "°C\n"
+        "TEMPERATURA DEL SUELO\n"
+        f"{_format_api_value(weather_day, 'max_gts_temp')}\n"
+        "Max.\n"
+        f"{_format_api_value(weather_day, 'min_gts_temp')}\n"
+        "Min.\n"
+        "°C\n"
+        "PRESIÓN\n"
+        f"{_format_api_value(weather_day, 'pressure')}\n"
+        " Media\n"
+        "Pa\n"
+        "VIENTO\n"
+        f"{_format_api_value(weather_day, 'wind_speed')}\n"
+        " Vientos dominantes\n"
+        "Km/h\n"
+        "HUMEDAD RELATIVA\n"
+        f"{_format_api_value(weather_day, 'abs_humidity')}\n"
+        " Media\n"
+        "%\n"
+        "AMANECER Y ATARDECER\n"
+        f"{_format_api_value(weather_day, 'sunrise')}\n"
+        "Amanecer\n"
+        f"{_format_api_value(weather_day, 'sunset')}\n"
+        "Atardecer\n"
+        "RADIACIÓN ULTRAVIOLETA\n"
+        f"{_format_api_value(weather_day, 'local_uv_irradiance_index')}\n"
+        " Nivel del índice\n"
+        "OPACIDAD ATMOSFÉRICA\n"
+        f"{_format_api_value(weather_day, 'atmo_opacity')}\n"
+    )
+
+
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=1, max=10),
@@ -64,14 +158,14 @@ def _get_weather_slide_text(driver: WebDriver) -> str:
     reraise=True,
 )
 def download_weather_today(driver: WebDriver | None = None) -> str:
-    owns_driver = driver is None
-    wd = driver or get_selenium_driver()
+    if driver is None:
+        return _format_api_weather_day(_download_weather_api()[0])
+
     try:
-        _open_weather_page(wd)
-        return _get_weather_slide_text(wd)
+        _open_weather_page(driver)
+        return _get_weather_slide_text(driver)
     finally:
-        if owns_driver:
-            wd.quit()
+        driver.quit()
 
 
 @retry(
@@ -81,35 +175,36 @@ def download_weather_today(driver: WebDriver | None = None) -> str:
     reraise=True,
 )
 def download_weather_last_n_days(driver: WebDriver | None = None, n_days: int = 0) -> list[str]:
-    owns_driver = driver is None
-    wd = driver or get_selenium_driver()
+    if driver is None:
+        return [_format_api_weather_day(weather_day) for weather_day in _download_weather_api()[:n_days + 1]]
+
     try:
-        _open_weather_page(wd)
+        _open_weather_page(driver)
         last_n_days_data = []
-        last_n_days_data.append(_get_weather_slide_text(wd))
+        last_n_days_data.append(_get_weather_slide_text(driver))
         for _ in range(n_days):
-            wd.find_element(By.ID, "mw-previous").click()
+            driver.find_element(By.ID, "mw-previous").click()
             time.sleep(1)
-            daily_data = wd.find_element(By.ID, "main-slide").text
+            daily_data = driver.find_element(By.ID, "main-slide").text
             last_n_days_data.append(daily_data)
 
         return last_n_days_data
     finally:
-        if owns_driver:
-            wd.quit()
+        driver.quit()
 
 
 def download_weather_historical(driver: WebDriver | None = None) -> list[str]:
-    owns_driver = driver is None
-    wd = driver or get_selenium_driver()
+    if driver is None:
+        return [_format_api_weather_day(weather_day) for weather_day in _download_weather_api()]
+
     try:
-        _open_weather_page(wd)
+        _open_weather_page(driver)
         historical_data = []
-        historical_data.append(_get_weather_slide_text(wd))
+        historical_data.append(_get_weather_slide_text(driver))
         while True:
-            wd.find_element(By.ID, "mw-previous").click()
+            driver.find_element(By.ID, "mw-previous").click()
             time.sleep(1)
-            daily_data = wd.find_element(By.ID, "main-slide").text
+            daily_data = driver.find_element(By.ID, "main-slide").text
 
             # There is no way of knowing if we reached the end, other than comparing with the previous day
             if daily_data == historical_data[-1]:
@@ -121,5 +216,4 @@ def download_weather_historical(driver: WebDriver | None = None) -> list[str]:
 
         return historical_data
     finally:
-        if owns_driver:
-            wd.quit()
+        driver.quit()

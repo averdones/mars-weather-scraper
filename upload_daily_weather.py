@@ -2,7 +2,7 @@ import time
 from pynamodb.exceptions import PutError
 
 from src.loggers import setup_logger
-from src.scraper import get_selenium_driver, download_weather_today, download_weather_last_n_days
+from src.scraper import download_weather_today, download_weather_last_n_days
 from src.parser import parse_weather_day
 from src.db_models import DailyWeather
 from src.db_utils import get_item
@@ -13,8 +13,7 @@ logger = setup_logger("upload_daily_weather", "../logs/upload_daily_data.log")
 
 def main():
     # Scrape
-    driver = get_selenium_driver()
-    weather_day_data = download_weather_today(driver)
+    weather_day_data = download_weather_today()
     parsed_weather_day_data = parse_weather_day(weather_day_data)
 
     sol = parsed_weather_day_data["sol"]
@@ -37,8 +36,7 @@ def main():
                 print(e)
         else:
             # Upload today's weather and the last n days
-            driver = get_selenium_driver()
-            weather_last_n_days_data = download_weather_last_n_days(driver, n_last_days)
+            weather_last_n_days_data = download_weather_last_n_days(n_days=n_last_days)
             for weather_data in weather_last_n_days_data:
                 parsed_weather_data = parse_weather_day(weather_data)
                 for attempt in range(10):

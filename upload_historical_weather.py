@@ -3,7 +3,7 @@ from pynamodb.exceptions import PutError
 import time
 
 from src.loggers import setup_logger
-from src.scraper import get_selenium_driver, download_weather_historical
+from src.scraper import download_weather_historical
 from src.parser import parse_weather_day
 from src.db_models import DailyWeather
 
@@ -22,8 +22,7 @@ def main(load_weather_hist_data_from_file: bool = False):
         with open("weather_hist_data.pickle", "rb") as f:
             weather_hist_data = pickle.load(f)
     else:
-        driver = get_selenium_driver()
-        weather_hist_data = download_weather_historical(driver)
+        weather_hist_data = download_weather_historical()
 
     # Pickle in case the upload process fails
     if not load_weather_hist_data_from_file:
